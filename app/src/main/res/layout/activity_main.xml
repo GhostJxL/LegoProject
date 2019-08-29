@@ -39,6 +39,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text=">从相册中选择一张照片"
+        android:textColor="@drawable/PressedColorGreyChange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -52,7 +53,7 @@
         android:layout_marginBottom="24dp"
         android:layout_marginStart="40dp"
         android:text="历史记录"
-        android:textColor="@drawable/main_history_color"
+        android:textColor="@drawable/PressedColorGreyChange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
