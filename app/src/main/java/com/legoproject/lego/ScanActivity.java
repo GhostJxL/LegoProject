@@ -11,9 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
@@ -36,10 +39,22 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
+import static org.opencv.imgproc.Imgproc.COLOR_BGR2HSV;
+
 public class ScanActivity extends AppCompatActivity implements CvCameraViewListener2 {
 
+    final static int RED = 0;
+    final static int ORANGE = 1;
+    final static int YELLOW = 2;
+    final static int GREEN = 3;
+    final static int BLUEGREEN = 4;
+    final static int BLUE = 5;
+    final static int PURPLE = 6;
     private JavaCameraView myCamera;
-    private boolean a;
+    private TextView colorText;
+    private int color = -1;
+    private Button button;
+    List<Point> source = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +62,35 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_scan);
         init();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (color) {
+                    case RED:
+                        colorText.setText("red");
+                        break;
+                    case ORANGE:
+                        colorText.setText("orange");
+                        break;
+                    case YELLOW:
+                        colorText.setText("yellow");
+                        break;
+                    case GREEN:
+                        colorText.setText("green");
+                        break;
+                    case BLUEGREEN:
+                        colorText.setText("blue-green");
+                        break;
+                    case BLUE:
+                        colorText.setText("blue");
+                        break;
+                    case PURPLE:
+                        colorText.setText("purple");
+                        break;
+                }
+            }
+        });
 
 
         //----向日葵测试
@@ -64,6 +108,11 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 //        src.release();
 //        dst.release();
         //--------------------------------------
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void init() {
@@ -92,6 +141,8 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             myCamera.disableView();
         }
         myCamera.enableView();
+        colorText = findViewById(R.id.color_text);
+        button = findViewById(R.id.det_but);
     }
 
     @Override
@@ -109,39 +160,59 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 
         Mat frame = inputFrame.rgba();
         if (this.getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-            Core.rotate(frame, frame, Core.ROTATE_90_CLOCKWISE);
+            Core.rotate(frame, frame, Core.ROTATE_90_CLOCKWISE); //旋转90度
         }
-//        for (int i=1;i<100;i++)
-//            for (int j=1;j<100;j++)
-//            {
-//
-//            }
-//        frame = rectangularDetection(frame); //矩形检测
-        return rectangularDetection(frame);
+        frame = rectangularDetection(frame); //矩形检测
+
+        return frame;
     }
+
+    private void colorDetection(Point point, Mat frame) {
+        Mat hsv = new Mat();
+        Imgproc.cvtColor(frame, hsv, COLOR_BGR2HSV);//BGR转换为HSV
+        int x = (int) point.x;
+        int y = (int) point.y;
+
+        double[] clone = hsv.get(x, y).clone();
+        double hun = clone[0];// HSV hun
+        double s = clone[1];
+        double v = clone[2];
+        if ((s > 43 && s < 255) || (v < 255 && v > 46)) {
+            if ((hun >= 0 && hun < 10) || (hun > 160 && hun < 200)) {
+                Log.i("Color", "red");
+                color = RED;
+            } else if (hun >= 11 && hun < 25) {
+                Log.i("Color", "ORANGE");
+                color = ORANGE;
+            } else if (hun >= 26 && hun < 34) {
+                Log.i("Color", "YELLOW");
+                color = YELLOW;
+            } else if (hun >= 35 && hun < 77) {
+                Log.i("Color", "GREEN");
+                color = GREEN;
+            } else if (hun >= 78 && hun < 99) {
+                Log.i("Color", "BLUEGREEN");
+                color = BLUEGREEN;
+            } else if (hun >= 110 && hun < 124) {
+                Log.i("Color", "BLUE");
+                color = BLUE;
+            } else if (hun >= 125 && hun < 155) {
+                Log.i("Color", "PURPLE");
+                color = PURPLE;
+            }
+        } else {
+            color = -1;
+
+        }
+
+
+    }
+
 
     private Mat rectangularDetection(Mat frame) {
         Mat frameGray = new Mat();
         Imgproc.cvtColor(frame, frameGray, Imgproc.COLOR_BGRA2GRAY); //转为灰度图
         Imgproc.Canny(frameGray, frameGray, 200, 400, 3, false); //阈值可调
-
-//        List<MatOfPoint> contours=new ArrayList<>();
-//        Imgproc.findContours(frame,contours,new Mat(),Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE);
-//        double maxVal = 0;
-//        int maxValIdx = 0;
-//        for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++)
-//        {
-//            double contourArea = Imgproc.contourArea(contours.get(contourIdx));
-//            if (maxVal < contourArea)
-//            {
-//                maxVal = contourArea;
-//                maxValIdx = contourIdx;
-//            }
-//        }
-//        Mat mRgba=new Mat();
-//        mRgba.create(frame.rows(), frame.cols(), CvType.CV_8UC3);
-//        //绘制检测到的轮廓
-//        Imgproc.drawContours(mRgba, contours, maxValIdx, new Scalar(0,255,0), 5);
 
         List<Point> rect = getCornersByContour(frameGray);
 //        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_GRAY2BGR); //转为彩图
@@ -150,12 +221,13 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             Imgproc.line(frame, rect.get(1), rect.get(3), new Scalar(0, 255, 0), 5, 8, 0);
             Imgproc.line(frame, rect.get(2), rect.get(0), new Scalar(0, 255, 0), 5, 8, 0);
             Imgproc.line(frame, rect.get(3), rect.get(2), new Scalar(0, 255, 0), 5, 8, 0);
+            colorDetection(rect.get(4), frame);
 
         }
         return frame;
     }
 
-    public static List<Point> getCornersByContour(Mat imgsource) {
+    public List<Point> getCornersByContour(Mat imgsource) {
         List<MatOfPoint> contours = new ArrayList<>();
         //轮廓检测
         Imgproc.findContours(imgsource, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -183,27 +255,13 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             }
         }
 
-        double[] temp_double = approxCurve.get(0, 0);
-        if (temp_double==null) return null;
-        Point point1 = new Point(temp_double[0], temp_double[1]);
+        double[] temp_double;
 
-        temp_double = approxCurve.get(1, 0);
-        if (temp_double==null) return null;
-        Point point2 = new Point(temp_double[0], temp_double[1]);
-
-        temp_double = approxCurve.get(2, 0);
-        if (temp_double==null) return null;
-        Point point3 = new Point(temp_double[0], temp_double[1]);
-
-        temp_double = approxCurve.get(3, 0);
-        if (temp_double==null) return null;
-        Point point4 = new Point(temp_double[0], temp_double[1]);
-
-        List<Point> source = new ArrayList<>();
-        source.add(point1);
-        source.add(point2);
-        source.add(point3);
-        source.add(point4);
+        for (int i = 0; i < 4; i++) {
+            temp_double = approxCurve.get(i, 0);
+            if (temp_double == null) return null;
+            source.add(new Point(temp_double[0], temp_double[1]));
+        }
         //对4个点进行排序
         Point centerPoint = new Point(0, 0);//质心
         for (Point corner : source) {
@@ -212,6 +270,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         }
         centerPoint.x = centerPoint.x / source.size();
         centerPoint.y = centerPoint.y / source.size();
+
         Point lefttop = new Point();
         Point righttop = new Point();
         Point leftbottom = new Point();
@@ -232,6 +291,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         source.add(righttop);
         source.add(leftbottom);
         source.add(rightbottom);
+        source.add(centerPoint);
         return source;
     }
 
