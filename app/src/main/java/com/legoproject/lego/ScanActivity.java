@@ -22,7 +22,11 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScanActivity extends AppCompatActivity implements CvCameraViewListener2 {
 
@@ -32,31 +36,10 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_scan);
-        if (!OpenCVLoader.initDebug()) {
-            // Handle initialization error
-        }
+        init();
 
-        //相机动态授权
-        if (Build.VERSION.SDK_INT >= 23) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }
-
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        myCamera = findViewById(R.id.main_camera);
-        myCamera.setVisibility(SurfaceView.VISIBLE);
-        myCamera.setCvCameraViewListener(this);
-        myCamera.setCameraIndex(0); //使用后置摄像头
-        if (myCamera != null) {
-            myCamera.disableView();
-        }
-        myCamera.enableView();
 
 
         //----向日葵测试
@@ -76,10 +59,32 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         //--------------------------------------
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void init() {
+        if (!OpenCVLoader.initDebug()) {
+            // Handle initialization error 确保opencv可用
+        }
 
+        //相机动态授权
+        if (Build.VERSION.SDK_INT >= 23) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+
+        //相机初始化
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //设置为竖屏模式
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        myCamera = findViewById(R.id.main_camera);
+        myCamera.setVisibility(SurfaceView.VISIBLE);
+        myCamera.setCvCameraViewListener(this);
+        myCamera.setCameraIndex(0); //使用后置摄像头
+        if (myCamera != null) {
+            myCamera.disableView();
+        }
+        myCamera.enableView();
     }
 
     @Override
@@ -99,6 +104,22 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         if (this.getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             Core.rotate(frame, frame, Core.ROTATE_90_CLOCKWISE);
         }
+//        for (int i=1;i<100;i++)
+//            for (int j=1;j<100;j++)
+//            {
+//
+//            }
+        frame = rectangularDetection(frame); //矩形检测
+        return frame;
+    }
+
+    private Mat rectangularDetection(Mat frame) {
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGRA2GRAY); //转为灰度图
+        Imgproc.Canny(frame,frame,200,400,3,false); //阈值可调
+        Mat hierachy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+//        Imgproc.findContours(frame,contours,hierachy,Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_NONE);
+        
         return frame;
     }
 
