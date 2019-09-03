@@ -27,6 +27,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_camera" />
 
+    <TextView
+        android:id="@+id/length_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color_text" />
+
+    <TextView
+        android:id="@+id/widith_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/length_text" />
+
     <Button
         android:id="@+id/det_but"
         android:layout_width="wrap_content"
@@ -37,7 +57,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/color_text" />
+        app:layout_constraintTop_toBottomOf="@+id/widith_text" />
     <!--<ImageView-->
         <!--android:id="@+id/scan_img"-->
         <!--android:layout_width="match_parent"-->
