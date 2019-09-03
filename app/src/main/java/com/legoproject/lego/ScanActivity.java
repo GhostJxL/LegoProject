@@ -273,17 +273,17 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             //检测contour是否是四边形
             MatOfPoint2f new_mat = new MatOfPoint2f(temp_contour.toArray());
             RotatedRect rect = Imgproc.minAreaRect(new_mat);
-            Point vertices[]=new Point[4];
+            Point vertices[] = new Point[4];
             rect.points(vertices);
             for (int i = 0; i < 4; i++)
-                Imgproc.line(imgsource, vertices[i], vertices[(i+1)%4],new  Scalar(0,255,0));
+                Imgproc.line(imgsource, vertices[i], vertices[(i + 1) % 4], new Scalar(0, 255, 0));
             Point centerPoint = new Point(0, 0);//质心
-                    for (int i=0;i<4;i++) {
-                        centerPoint.x += vertices[i].x;
-                        centerPoint.y += vertices[i].y;
-                    }
-                    centerPoint.x = centerPoint.x / 4;
-                    centerPoint.y = centerPoint.y / 4;
+            for (int i = 0; i < 4; i++) {
+                centerPoint.x += vertices[i].x;
+                centerPoint.y += vertices[i].y;
+            }
+            centerPoint.x = centerPoint.x / 4;
+            centerPoint.y = centerPoint.y / 4;
             List<Point> source = new ArrayList<>();
             Point lefttop = new Point();
             Point righttop = new Point();
@@ -306,7 +306,18 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             source.add(leftbottom);
             source.add(rightbottom);
             source.add(centerPoint);
-            colorDetection(source, imgsource);
+            int color = colorDetection(source, imgsource);
+            double length = sqrt((source.get(0).x - source.get(1).x) * (source.get(0).x - source.get(1).x) +
+                    (source.get(0).y - source.get(1).y) * (source.get(0).y - source.get(1).y));
+            double width = sqrt((source.get(0).x - source.get(2).x) * (source.get(0).x - source.get(2).x) +
+                    (source.get(0).y - source.get(2).y) * (source.get(0).y - source.get(2).y));
+            int lengthInt = (int) (length / 32.5);
+            int widthInt = (int) (width / 32.5);
+            if (lengthInt < widthInt) {
+                int temp = lengthInt;
+                lengthInt = widthInt;
+                widthInt = temp;
+            }
 //            if (true) return imgsource;
 //            int contourSize = (int) temp_contour.total();
 //            MatOfPoint2f approxCurve_temp = new MatOfPoint2f();
