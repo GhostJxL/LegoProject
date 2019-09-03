@@ -14,8 +14,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -51,7 +53,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     final static int BLUE = 5;
     final static int PURPLE = 6;
     private JavaCameraView myCamera;
-    private TextView colorText;
+    private String colorText;
     private int color = -1;
     private Button button;
     List<Point> source = new ArrayList<>();
@@ -68,47 +70,30 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             public void onClick(View view) {
                 switch (color) {
                     case RED:
-                        colorText.setText("red");
+                        colorText="red";
                         break;
                     case ORANGE:
-                        colorText.setText("orange");
+                        colorText="orange";
                         break;
                     case YELLOW:
-                        colorText.setText("yellow");
+                        colorText="yellow";
                         break;
                     case GREEN:
-                        colorText.setText("green");
+                        colorText="green";
                         break;
                     case BLUEGREEN:
-                        colorText.setText("blue-green");
+                        colorText="blue-green";
                         break;
                     case BLUE:
-                        colorText.setText("blue");
+                        colorText="blue";
                         break;
                     case PURPLE:
-                        colorText.setText("purple");
-                        break;
-                }
+                        colorText="purple";
+                        break;}
             }
         });
-
-
-        //----向日葵测试
-//        boolean success = OpenCVLoader.initDebug();
-//        Bitmap bitmap = BitmapFactory.decodeResource(
-//                this.getResources(), R.drawable.test
-//        );
-//        Mat src = new Mat();
-//        Mat dst = new Mat();
-//        Utils.bitmapToMat(bitmap, src);
-//        Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGRA2GRAY);
-//        Utils.matToBitmap(dst, bitmap);
-//        ImageView iv = this.findViewById(R.id.scan_img);
-//        iv.setImageBitmap(bitmap);
-//        src.release();
-//        dst.release();
-        //--------------------------------------
     }
+
 
     @Override
     protected void onResume() {
@@ -133,7 +118,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 //        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //设置为竖屏模式
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        myCamera = findViewById(R.id.main_camera);
+        myCamera = findViewById(R.id.scan_camera);
         myCamera.setVisibility(SurfaceView.VISIBLE);
         myCamera.setCvCameraViewListener(this);
         myCamera.setCameraIndex(0); //使用后置摄像头
@@ -141,8 +126,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             myCamera.disableView();
         }
         myCamera.enableView();
-        colorText = findViewById(R.id.color_text);
-        button = findViewById(R.id.det_but);
+        button = findViewById(R.id.scan_button);
     }
 
     @Override
