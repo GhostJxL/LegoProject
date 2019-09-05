@@ -1,68 +1,29 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="40dp"
-    android:paddingRight="40dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp">
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/lego_color"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/lego_color"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:textSize="16sp" />
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/lego_size"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/lego_width"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/lego_mul1"
-            android:text=" * "
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/lego_length"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/lego_board"
-            android:text=" Lego Board"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="30dp"
+
+    <TextView
+        android:id="@+id/lego_number"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/lego_mul2"
-            android:text="* "
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/lego_number"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:textSize="16sp" />
 
 </LinearLayout>

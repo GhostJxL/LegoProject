@@ -6,12 +6,13 @@ package com.legoproject.lego;
 
 public class Lego {
     private int legoColor, legoWidth, legoLength, legoNumber;
-
-    public Lego(int legoColor, int legoWidth, int legoLength, int legoNumber){
+    private boolean isDamaged;
+    public Lego(int legoColor, int legoWidth, int legoLength, int legoNumber, boolean isDamaged) {
         this.legoColor = legoColor;
         this.legoWidth = legoWidth;
         this.legoLength = legoLength;
         this.legoNumber = legoNumber;
+        this.isDamaged = isDamaged;
     }
 
     public int getLegoColor() {
@@ -22,12 +23,13 @@ public class Lego {
         return legoWidth;
     }
 
-    public int getLegoLength(){
+    public int getLegoLength() {
         return legoLength;
     }
 
-    public int getLegoNumber(){
+    public int getLegoNumber() {
         return legoNumber;
     }
 
+    public boolean getIsDamaged() { return isDamaged; }
 }

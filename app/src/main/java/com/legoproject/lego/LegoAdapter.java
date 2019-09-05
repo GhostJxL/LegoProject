@@ -16,25 +16,31 @@ import java.util.List;
 
 public class LegoAdapter extends ArrayAdapter<Lego> {
     private int resourseID;
-    private String[] color = {"red", "orange", "yellow", "green", "blue-green", "blue", "purple"};
+    private String[] color = {"white", "orange", "yellow", "green", "blue-green", "blue"};
 
-    public LegoAdapter(Context context, int textViewResourseId, List<Lego> objects){
+    public LegoAdapter(Context context, int textViewResourseId, List<Lego> objects) {
         super(context, textViewResourseId, objects);
         resourseID = textViewResourseId;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         Lego lego = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourseID, parent, false);
-        TextView legoColor = (TextView)view.findViewById(R.id.lego_color);
-        TextView legoWidth = (TextView)view.findViewById(R.id.lego_width);
-        TextView legoLength = (TextView)view.findViewById(R.id.lego_length);
-        TextView legoNumber = (TextView)view.findViewById(R.id.lego_number);
-        legoColor.setText(color[lego.getLegoColor()]);
-        legoWidth.setText(String.valueOf(lego.getLegoWidth()));
-        legoLength.setText(String.valueOf(lego.getLegoLength()));
-        legoNumber.setText(String.valueOf(lego.getLegoNumber()));
+        if (!lego.getIsDamaged()) {
+            TextView legoColor = (TextView) view.findViewById(R.id.lego_color);
+            TextView legoSize = (TextView) view.findViewById(R.id.lego_size);
+            TextView legoNumber = (TextView) view.findViewById(R.id.lego_number);
+            legoColor.setText(color[lego.getLegoColor()]);
+            legoSize.setText(String.valueOf(lego.getLegoWidth()) + " X " + String.valueOf(lego.getLegoLength()) + " Lego Board");
+            legoNumber.setText(" X" + String.valueOf(lego.getLegoNumber()));
+        } else {
+            TextView legoDamaged = (TextView) view.findViewById(R.id.lego_size);
+            if (lego.getLegoNumber() == 1)
+                legoDamaged.setText(String.valueOf(lego.getLegoNumber()) + " Damaged Board");
+            else
+                legoDamaged.setText(String.valueOf(lego.getLegoNumber()) + " Damaged Boards");
+        }
         return view;
     }
 

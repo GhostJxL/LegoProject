@@ -47,20 +47,11 @@ import static org.opencv.imgproc.Imgproc.COLOR_BGR2HSV;
 
 public class ScanActivity extends AppCompatActivity implements CvCameraViewListener2 {
 
-    //    final static int RED = 0;
-//    final static int ORANGE = 1;
-//    final static int YELLOW = 2;
-//    final static int GREEN = 3;
-//    final static int BLUEGREEN = 4;
-//    final static int BLUE = 5;
-//    final static int PURPLE = 6;
     private JavaCameraView myCamera;
-    private TextView colorText, lengthText, widthText;
-    private int color = -1;
     private Button button;
 
     private List<Lego> legoList = new ArrayList<>();
-    private int[] sheet = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private int[] sheet = new int[31];
     private int legosize;
 
     @Override
@@ -80,30 +71,6 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             public void onClick(View view) {
                 initLegos();
                 adapter.notifyDataSetChanged();
-//                switch (color) {
-//                    case RED:
-//                        colorText.setText("red");
-//                        break;
-//                    case ORANGE:
-//                        colorText.setText("orange");
-//                        break;
-//                    case YELLOW:
-//                        colorText.setText("yellow");
-//                        break;
-//                    case GREEN:
-//                        colorText.setText("green");
-//                        break;
-//                    case BLUEGREEN:
-//                        colorText.setText("blue-green");
-//                        break;
-//                    case BLUE:
-//                        colorText.setText("blue");
-//                        break;
-//                    case PURPLE:
-//                        colorText.setText("purple");
-//                        break;
-//                }
-                //List显示更新
             }
         });
 
@@ -112,111 +79,25 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     private void initLegos() {
 
         legoList.clear();
-        if(sheet[0]>0){
-            Lego red12 = new Lego(0, 1, 2, sheet[0]);
-            legoList.add(red12);}
-        if(sheet[1]>0){
-            Lego orange12 = new Lego(1, 1, 2, sheet[1]);
-            legoList.add(orange12);}
-        if(sheet[2]>0){
-            Lego yellow12 = new Lego(2, 1, 2, sheet[2]);
-            legoList.add(yellow12);}
-        if(sheet[3]>0){
-            Lego green12 = new Lego(3, 1, 2, sheet[3]);
-            legoList.add(green12);}
-        if(sheet[4]>0){
-            Lego bluegreen12 = new Lego(4, 1, 2, sheet[4]);
-            legoList.add(bluegreen12);}
-        if(sheet[5]>0){
-            Lego blue12 = new Lego(5, 1, 2, sheet[5]);
-            legoList.add(blue12);}
-        if(sheet[6]>0){
-            Lego purple12 = new Lego(6, 1, 2, sheet[6]);
-            legoList.add(purple12);}
-        if(sheet[7]>0){
-            Lego red14 = new Lego(0, 1, 4, sheet[7]);
-            legoList.add(red14);}
-        if(sheet[8]>0){
-            Lego orange14 = new Lego(1, 1, 4, sheet[8]);
-            legoList.add(orange14);}
-        if(sheet[9]>0){
-            Lego yellow14 = new Lego(2, 1, 4, sheet[9]);
-            legoList.add(yellow14);}
-        if(sheet[10]>0){
-            Lego green14 = new Lego(3, 1, 4, sheet[10]);
-            legoList.add(green14);}
-        if(sheet[11]>0){
-            Lego bluegreen14 = new Lego(4, 1, 4, sheet[11]);
-            legoList.add(bluegreen14);}
-        if(sheet[12]>0){
-            Lego blue14 = new Lego(5, 1, 4, sheet[12]);
-            legoList.add(blue14);}
-        if(sheet[13]>0){
-            Lego purple14 = new Lego(6, 1, 4, sheet[13]);
-            legoList.add(purple14);}
-        if(sheet[14]>0){
-            Lego red22 = new Lego(0, 2, 2, sheet[14]);
-            legoList.add(red22);}
-        if(sheet[15]>0){
-            Lego orange22 = new Lego(1, 2, 2, sheet[15]);
-            legoList.add(orange22);}
-        if(sheet[16]>0){
-            Lego yellow22 = new Lego(2, 2, 2, sheet[16]);
-            legoList.add(yellow22);}
-        if(sheet[17]>0){
-            Lego green22 = new Lego(3, 2, 2, sheet[17]);
-            legoList.add(green22);}
-        if(sheet[18]>0){
-            Lego bluegreen22 = new Lego(4, 2, 2, sheet[18]);
-            legoList.add(bluegreen22);}
-        if(sheet[19]>0){
-            Lego blue22 = new Lego(5, 2, 2, sheet[19]);
-            legoList.add(blue22);}
-        if(sheet[20]>0){
-            Lego purple22 = new Lego(6, 2, 2, sheet[20]);
-            legoList.add(purple22);}
-        if(sheet[21]>0){
-            Lego red23 = new Lego(0, 2, 3, sheet[21]);
-            legoList.add(red23);}
-        if(sheet[22]>0){
-            Lego orange23 = new Lego(1, 2, 3, sheet[22]);
-            legoList.add(orange23);}
-        if(sheet[23]>0){
-            Lego yellow23 = new Lego(2, 2, 3, sheet[23]);
-            legoList.add(yellow23);}
-        if(sheet[24]>0){
-            Lego green23 = new Lego(3, 2, 3, sheet[24]);
-            legoList.add(green23);}
-        if(sheet[25]>0){
-            Lego bluegreen23 = new Lego(4, 2, 3, sheet[25]);
-            legoList.add(bluegreen23);}
-        if(sheet[26]>0){
-            Lego blue23 = new Lego(5, 2, 3, sheet[26]);
-            legoList.add(blue23);}
-        if(sheet[27]>0){
-            Lego purple23 = new Lego(6, 2, 3, sheet[27]);
-            legoList.add(purple23);}
-        if(sheet[28]>0){
-            Lego red24 = new Lego(0, 2, 4, sheet[28]);
-            legoList.add(red24);}
-        if(sheet[29]>0){
-            Lego orange24 = new Lego(1, 2, 4, sheet[29]);
-            legoList.add(orange24);}
-        if(sheet[30]>0){
-            Lego yellow24 = new Lego(2, 2, 4, sheet[30]);
-            legoList.add(yellow24);}
-        if(sheet[31]>0){
-            Lego green24 = new Lego(3, 2, 4, sheet[31]);
-            legoList.add(green24);}
-        if(sheet[32]>0){
-            Lego bluegreen24 = new Lego(4, 2, 4, sheet[32]);
-            legoList.add(bluegreen24);}
-        if(sheet[33]>0){
-            Lego blue24 = new Lego(5, 2, 4, sheet[33]);
-            legoList.add(blue24);}
-        if(sheet[34]>0){
-            Lego purple24 = new Lego(6, 2, 4, sheet[34]);
-            legoList.add(purple24);}
+//        int sheet[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}; //测试用假数据
+        for (int i = 0; i < 30; i++) {
+            if (sheet[i] > 0) {
+                int color = i % 6;
+                int width = 0;
+                if (i < 12) width = 1;
+                else width = 2;
+                int length = 0;
+                if ((0 <= i && i <= 5) || (12 <= i && i <= 17)) length = 2;
+                else if (18 <= i && i <= 23) length = 3;
+                else if ((6 <= i && i <= 11) || (24 <= i && i <= 29)) length = 4;
+                Lego lego = new Lego(color, width, length, sheet[i], false);
+                legoList.add(lego);
+            }
+        }
+        if (sheet[30] > 0) {
+            Lego damage = new Lego(0, 0, 0, sheet[30], true);
+            legoList.add(damage);
+        }
     }
 
     @Override
@@ -251,10 +132,6 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         }
         myCamera.enableView();
 
-
-//        colorText = findViewById(R.id.color_text);
-//        lengthText = findViewById(R.id.length_text);
-//        widthText = findViewById(R.id.widith_text);
         button = findViewById(R.id.det_but);
     }
 
@@ -275,51 +152,9 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
         if (this.getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             Core.rotate(frame, frame, Core.ROTATE_90_CLOCKWISE); //旋转90度
         }
-        sheet = new int[35];
+        sheet = new int[31];
         return detection(frame); //检测
     }
-
-//    private void colorDetection(Point point, Mat frame) {
-//        Mat hsv = new Mat();
-//        Imgproc.cvtColor(frame, hsv, COLOR_BGR2HSV);//BGR转换为HSV
-//        int x = (int) point.x;
-//        int y = (int) point.y;
-//
-//        double[] clone = hsv.get(x, y).clone();
-//        double hun = clone[0];// HSV hun
-//        double s = clone[1];
-//        double v = clone[2];
-//        if ((s > 43 && s < 255) || (v < 255 && v > 46)) {
-//            if ((hun >= 0 && hun < 10) || (hun > 160 && hun < 200)) {
-//                Log.i("Color", "red");
-//                color = RED;
-//            } else if (hun >= 11 && hun < 25) {
-//                Log.i("Color", "ORANGE");
-//                color = ORANGE;
-//            } else if (hun >= 26 && hun < 34) {
-//                Log.i("Color", "YELLOW");
-//                color = YELLOW;
-//            } else if (hun >= 35 && hun < 77) {
-//                Log.i("Color", "GREEN");
-//                color = GREEN;
-//            } else if (hun >= 78 && hun < 99) {
-//                Log.i("Color", "BLUEGREEN");
-//                color = BLUEGREEN;
-//            } else if (hun >= 110 && hun < 124) {
-//                Log.i("Color", "BLUE");
-//                color = BLUE;
-//            } else if (hun >= 125 && hun < 155) {
-//                Log.i("Color", "PURPLE");
-//                color = PURPLE;
-//            }
-//        } else {
-//            color = -1;
-//
-//        }
-//
-//
-//    }
-
 
     public Mat detection(Mat imgsource) {
         Mat frameGray = new Mat();
@@ -341,20 +176,27 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 
             double contourarea = Imgproc.contourArea(temp_contour); //计算轮廓面积
 
-            if (contourarea > 2100) { //1000为1X1乐高积木的面积大小
+            if (contourarea > 1000) { //1000为1X1乐高积木的面积大小
 
                 RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(temp_contour.toArray())); //最小旋转矩形拟合
-
                 Point vertices[] = new Point[4];//得到矩形的四个顶点
                 rect.points(vertices);
                 if (vertices[0] == new Point(0, 0) ||
                         vertices[1] == new Point(0, 0) ||
                         vertices[2] == new Point(0, 0) ||
                         vertices[3] == new Point(0, 0))
-                    break;
+                    continue;
 
                 for (int i = 0; i < 4; i++)
                     Imgproc.line(imgsource, vertices[i], vertices[(i + 1) % 4], new Scalar(255, 0, 0), 2); //绘制边框，红色边框标定
+
+
+                MatOfPoint minRect = new MatOfPoint(vertices);
+                double minrectarea = Imgproc.contourArea(minRect);
+                if (contourarea / minrectarea < 0.90) {//判断是否破损
+                    sheet[30]++;
+                    continue;
+                }
 
                 Point centerPoint = new Point(0, 0);//计算质心坐标
                 for (int i = 0; i < 4; i++) {
@@ -387,7 +229,8 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                 source.add(rightbottom);
                 source.add(centerPoint);
 
-                int color = colorDetection(source, imgsource); //颜色检测
+                int color = -1;
+                color = colorDetection(source, imgsource); //颜色检测
 
                 //尺寸计算
                 double length = sqrt((source.get(0).x - source.get(1).x) * (source.get(0).x - source.get(1).x) +
@@ -403,7 +246,8 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                     lengthInt = widthInt;
                     widthInt = temp;
                 }
-//                color = 3;
+                color = 3; //测试用
+                int legosize = -1;
                 if (widthInt == 1 && lengthInt == 2) {
                     legosize = 0;
                 }
@@ -419,8 +263,8 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                 if (widthInt == 2 && lengthInt == 4) {
                     legosize = 4;
                 }
-                sheet[color + 7 * legosize] = sheet[color + 7 * legosize] + 1;
-                legoList.get(color + 7 * legosize).setLegoNumber(sheet[color + 7 * legosize]);
+                if (color != -1 && legosize != -1)
+                    sheet[color + 6 * legosize]++;
 
                 //List数据更新
 
