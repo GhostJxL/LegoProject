@@ -30,7 +30,4 @@ public class Lego {
         return legoNumber;
     }
 
-    public void setLegoNumber(int legoNumber) {
-        this.legoNumber = legoNumber;
-    }
 }
