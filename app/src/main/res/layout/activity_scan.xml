@@ -8,7 +8,7 @@
     tools:context="com.legoproject.lego.ScanActivity">
 
     <org.opencv.android.JavaCameraView
-        android:id="@+id/main_camera"
+        android:id="@+id/scan_camera"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_marginTop="8dp"
@@ -17,35 +17,35 @@
         app:layout_constraintTop_toTopOf="parent"
         opencv:show_fps="true" />
 
-    <TextView
-        android:id="@+id/color_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_camera" />
+    <!--<TextView-->
+        <!--android:id="@+id/color_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:textSize="30dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/main_camera" />-->
 
-    <TextView
-        android:id="@+id/length_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/color_text" />
+    <!--<TextView-->
+        <!--android:id="@+id/length_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:textSize="30dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/color_text" />-->
 
-    <TextView
-        android:id="@+id/widith_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/length_text" />
+    <!--<TextView-->
+        <!--android:id="@+id/widith_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:textSize="30dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/length_text" />-->
 
     <Button
         android:id="@+id/det_but"
@@ -57,7 +57,15 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/widith_text" />
+        app:layout_constraintTop_toBottomOf="@+id/scan_camera" />
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/det_but">
+    </ListView>
+
     <!--<ImageView-->
         <!--android:id="@+id/scan_img"-->
         <!--android:layout_width="match_parent"-->
