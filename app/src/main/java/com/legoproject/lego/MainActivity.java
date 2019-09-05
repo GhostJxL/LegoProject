@@ -12,9 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-
-
-    private TextView tv02,tv03;
+    private TextView tv02;
 
     private RelativeLayout tv01;
 
@@ -32,9 +30,7 @@ public class MainActivity extends Activity {
 
         tv01 = findViewById(R.id.main_cameralayout);
 
-        tv02 = findViewById(R.id.main_photo);
-
-        tv03 = findViewById(R.id.main_history);
+        tv02 = findViewById(R.id.main_history);
 
 
 
@@ -45,8 +41,6 @@ public class MainActivity extends Activity {
         tv01.setOnClickListener(ml);
 
         tv02.setOnClickListener(ml);
-
-        tv03.setOnClickListener(ml);
 
 
 
@@ -65,12 +59,6 @@ public class MainActivity extends Activity {
                 case (R.id.main_cameralayout):
 
                     scan();
-
-                    break;
-
-                case (R.id.main_photo):
-
-                    photobook();
 
                     break;
 
@@ -97,15 +85,6 @@ public class MainActivity extends Activity {
 //        finish();
 
     }
-
-
-
-    public void photobook(){
-
-
-
-    }
-
 
 
     public void showhistory(){

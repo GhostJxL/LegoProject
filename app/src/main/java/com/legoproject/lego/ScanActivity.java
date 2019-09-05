@@ -1,6 +1,7 @@
 package com.legoproject.lego;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -35,9 +36,14 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -53,12 +59,14 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     private List<Lego> legoList = new ArrayList<>();
     private int[] sheet = new int[31];
     private int legosize;
+    private String[] colorToText = {"white", "orange", "yellow", "green", "blue-green", "blue"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_scan);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//显示左上角返回键
         init();
 //        initLegos();
         final LegoAdapter adapter = new LegoAdapter(ScanActivity.this,
@@ -79,7 +87,17 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     private void initLegos() {
 
         legoList.clear();
-//        int sheet[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}; //测试用假数据
+        FileOutputStream fos=null;
+//        PrintWriter pw=null;
+        try {
+            fos = openFileOutput("record.history", Context.MODE_APPEND);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        PrintWriter pw=new PrintWriter(fos);
+        pw.println(DateUtil.getDateString(new Date())+"\n");
+        pw.flush();
+        int sheet[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}; //测试用假数据
         for (int i = 0; i < 30; i++) {
             if (sheet[i] > 0) {
                 int color = i % 6;
@@ -92,11 +110,25 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                 else if ((6 <= i && i <= 11) || (24 <= i && i <= 29)) length = 4;
                 Lego lego = new Lego(color, width, length, sheet[i], false);
                 legoList.add(lego);
+                pw=new PrintWriter(fos);
+                pw.println(colorToText[color]+ "  "+ String.valueOf(width) + " X "
+                        + String.valueOf(length) + " Lego Board"+"  X" + String.valueOf(sheet[i])+"\n");
+                pw.flush();
             }
         }
         if (sheet[30] > 0) {
             Lego damage = new Lego(0, 0, 0, sheet[30], true);
             legoList.add(damage);
+            pw=new PrintWriter(fos);
+            if(sheet[30]==1){pw.println("Damaged Board"+"  X"+String.valueOf(sheet[30]) + "\n");}
+            if(sheet[30]>1){pw.println("Damaged Boards"+"  X"+String.valueOf(sheet[30]) + "\n");}
+            pw.flush();
+        }
+        try {
+            fos.close();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

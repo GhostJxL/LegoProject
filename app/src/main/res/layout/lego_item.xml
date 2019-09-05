@@ -2,28 +2,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingLeft="40dp"
-    android:paddingRight="40dp">
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
 
     <TextView
         android:id="@+id/lego_color"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
 
     <TextView
         android:id="@+id/lego_size"
-        android:layout_width="150dp"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
 
     <TextView
         android:id="@+id/lego_number"
-        android:layout_width="40dp"
+        android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

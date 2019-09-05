@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+
 /**
  * Created by dell on 2019/9/3.
  */
@@ -27,19 +28,21 @@ public class LegoAdapter extends ArrayAdapter<Lego> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Lego lego = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourseID, parent, false);
+        TextView legoColor = (TextView) view.findViewById(R.id.lego_color);
+        TextView legoSize = (TextView) view.findViewById(R.id.lego_size);
+        TextView legoNumber = (TextView) view.findViewById(R.id.lego_number);
         if (!lego.getIsDamaged()) {
-            TextView legoColor = (TextView) view.findViewById(R.id.lego_color);
-            TextView legoSize = (TextView) view.findViewById(R.id.lego_size);
-            TextView legoNumber = (TextView) view.findViewById(R.id.lego_number);
             legoColor.setText(color[lego.getLegoColor()]);
             legoSize.setText(String.valueOf(lego.getLegoWidth()) + " X " + String.valueOf(lego.getLegoLength()) + " Lego Board");
-            legoNumber.setText(" X" + String.valueOf(lego.getLegoNumber()));
+            legoNumber.setText("X" + String.valueOf(lego.getLegoNumber()));
         } else {
-            TextView legoDamaged = (TextView) view.findViewById(R.id.lego_size);
-            if (lego.getLegoNumber() == 1)
-                legoDamaged.setText(String.valueOf(lego.getLegoNumber()) + " Damaged Board");
-            else
-                legoDamaged.setText(String.valueOf(lego.getLegoNumber()) + " Damaged Boards");
+            legoColor.setText("");
+            if (lego.getLegoNumber() == 1){
+                legoSize.setText("Damaged Board");
+                legoNumber.setText("X" + String.valueOf(lego.getLegoNumber()));}
+            else{
+                legoSize.setText("Damaged Boards");
+                legoNumber.setText("X" + String.valueOf(lego.getLegoNumber()));}
         }
         return view;
     }
