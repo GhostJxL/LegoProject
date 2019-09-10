@@ -50,8 +50,10 @@ import java.util.Vector;
 
 import static java.lang.Math.sqrt;
 import static org.opencv.imgproc.Imgproc.COLOR_BGR2HSV;
+import static org.opencv.imgproc.Imgproc.COLOR_BGRA2BGR;
 
 public class ScanActivity extends AppCompatActivity implements CvCameraViewListener2 {
+
 
     private JavaCameraView myCamera;
     private Button button;
@@ -59,7 +61,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     private List<Lego> legoList = new ArrayList<>();
     private int[] sheet = new int[31];
     private int legosize;
-    private String[] colorToText = {"white", "orange", "yellow", "green", "blue-green", "blue"};
+    private String[] colorToText = {"white", "orange", "light-green", "dark-green", "light-blue", "dark-blue"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,10 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
             @Override
             public void onClick(View view) {
                 initLegos();
+
                 adapter.notifyDataSetChanged();
+
+
             }
         });
 
@@ -87,17 +92,22 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
     private void initLegos() {
 
         legoList.clear();
-        FileOutputStream fos=null;
+        boolean isBlank = true;
+        for (int i = 0; i < 31; i++) {
+            if (sheet[i] != 0) isBlank = false;
+        }
+        if (isBlank) return;
+        FileOutputStream fos = null;
 //        PrintWriter pw=null;
         try {
             fos = openFileOutput("record.history", Context.MODE_APPEND);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        PrintWriter pw=new PrintWriter(fos);
-        pw.println(DateUtil.getDateString(new Date())+"\n");
+        PrintWriter pw = new PrintWriter(fos);
+        pw.println(DateUtil.getDateString(new Date()) + "\n");
         pw.flush();
-        int sheet[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}; //测试用假数据
+//        int sheet[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}; //测试用假数据
         for (int i = 0; i < 30; i++) {
             if (sheet[i] > 0) {
                 int color = i % 6;
@@ -110,18 +120,22 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                 else if ((6 <= i && i <= 11) || (24 <= i && i <= 29)) length = 4;
                 Lego lego = new Lego(color, width, length, sheet[i], false);
                 legoList.add(lego);
-                pw=new PrintWriter(fos);
-                pw.println(colorToText[color]+ "  "+ String.valueOf(width) + " X "
-                        + String.valueOf(length) + " Lego Board"+"  X" + String.valueOf(sheet[i])+"\n");
+                pw = new PrintWriter(fos);
+                pw.println(colorToText[color] + "  " + String.valueOf(width) + " X "
+                        + String.valueOf(length) + " Lego Board" + "  X" + String.valueOf(sheet[i]) + "\n");
                 pw.flush();
             }
         }
         if (sheet[30] > 0) {
             Lego damage = new Lego(0, 0, 0, sheet[30], true);
             legoList.add(damage);
-            pw=new PrintWriter(fos);
-            if(sheet[30]==1){pw.println("Damaged Board"+"  X"+String.valueOf(sheet[30]) + "\n");}
-            if(sheet[30]>1){pw.println("Damaged Boards"+"  X"+String.valueOf(sheet[30]) + "\n");}
+            pw = new PrintWriter(fos);
+            if (sheet[30] == 1) {
+                pw.println("Damaged Board" + "  X" + String.valueOf(sheet[30]) + "\n");
+            }
+            if (sheet[30] > 1) {
+                pw.println("Damaged Boards" + "  X" + String.valueOf(sheet[30]) + "\n");
+            }
             pw.flush();
         }
         try {
@@ -208,7 +222,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
 
             double contourarea = Imgproc.contourArea(temp_contour); //计算轮廓面积
 
-            if (contourarea > 1000) { //1000为1X1乐高积木的面积大小
+            if (contourarea > 1000 && contourarea < 9000) { //1000为1X1乐高积木的面积大小
 
                 RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(temp_contour.toArray())); //最小旋转矩形拟合
                 Point vertices[] = new Point[4];//得到矩形的四个顶点
@@ -278,7 +292,7 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                     lengthInt = widthInt;
                     widthInt = temp;
                 }
-                color = 3; //测试用
+//                color = 3; //测试用
                 int legosize = -1;
                 if (widthInt == 1 && lengthInt == 2) {
                     legosize = 0;
@@ -295,18 +309,103 @@ public class ScanActivity extends AppCompatActivity implements CvCameraViewListe
                 if (widthInt == 2 && lengthInt == 4) {
                     legosize = 4;
                 }
-                if (color != -1 && legosize != -1)
+                if (color != -1 && legosize != -1) {
                     sheet[color + 6 * legosize]++;
+//                    for (int i = 0; i < 4; i++)
+//                        Imgproc.line(imgsource, vertices[i], vertices[(i + 1) % 4], new Scalar(247, 217, 76), 2); //绘制边框，黄色边框标定
 
-                //List数据更新
+                }
 
             }
         }
         return imgsource;
     }
 
+    public static double RGBtoHSV(double r, double g, double b) {
+
+        double h, s, v;
+
+        double min, max, delta;
+
+        min = Math.min(Math.min(r, g), b);
+        max = Math.max(Math.max(r, g), b);
+
+        // V
+        v = max;
+
+        delta = max - min;
+
+        // S
+        if (max != 0)
+            s = delta / max;
+        else {
+            s = 0;
+            h = -1;
+            return h;
+        }
+
+        // H
+        if (r == max)
+            h = (g - b) / delta; // between yellow & magenta
+        else if (g == max)
+            h = 2 + (b - r) / delta; // between cyan & yellow
+        else
+            h = 4 + (r - g) / delta; // between magenta & cyan
+
+        h *= 60;    // degrees
+
+        if (h < 0)
+            h += 360;
+
+        return h;
+    }
+
+
     private int colorDetection(List<Point> source, Mat imgsource) {
+        Imgproc.GaussianBlur(imgsource, imgsource, new Size(3, 3), 2, 2); //高斯滤波降噪
+        //Mat hsv = new Mat(imgsource.size(), CvType.CV_8UC3);
+        Imgproc.cvtColor(imgsource, imgsource, COLOR_BGRA2BGR);
+        // Imgproc.cvtColor(hsv, hsv, COLOR_BGR2HSV);
+
+        Point[] points = new Point[5];
+        for (int i = 0; i < 5; i++) {
+            points[i] = source.get(i);
+        }
+        points[0].x = points[0].x + 10;
+        points[0].y = points[0].y + 10;
+        points[1].x = points[1].x - 10;
+        points[1].y = points[1].y + 10;
+        points[2].x = points[2].x + 10;
+        points[2].y = points[2].y - 10;
+        points[3].x = points[3].x - 10;
+        points[3].y = points[3].y - 10;
+
+        double[] temp;
+        double h = 0, r = 0, g = 0, b = 0;
+        for (int i = 0; i < 5; i++) {
+
+
+            temp = imgsource.get((int) points[i].y, (int) points[i].x).clone();
+            r = temp[0] / 5 + r;
+            g = temp[1] / 5 + g;
+            b = temp[2] / 5 + b;
+            h = RGBtoHSV(temp[0], temp[1], temp[2]) / 5 + h;
+            // temp = hsv.get((int) points[i].y, (int) points[i].x).clone();
+            // temp = imgsource.get((int) points[i].y, (int) points[i].x).clone();
+            //  r = temp[0] / 5 + r;
+            //  g = temp[1] / 5 + g;
+            // b = temp[2] / 5 + b;
+        }
+
+        if (r > 200 && g > 200 && b > 200) return 0;
+        if (0 < h && h < 50) return 1;
+        else if (50 < h && h < 130) return 2;
+        else if (132 < h && h < 150) return 3;
+        else if (170 < h && h < 200) return 4;
+        else if (205 < h && h < 220) return 5;
         return -1;
+
+
     }
 
 }
